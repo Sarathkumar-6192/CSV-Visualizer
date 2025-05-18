@@ -1,55 +1,59 @@
-# CSV-Visualizer
-Final Project: CSV Visualizer — Interactive Data Charting Tool
-Project Overview
-The CSV Visualizer is a responsive web application designed to empower users to upload their CSV data files and transform raw tabular data into compelling, customizable graphical visualizations. Built using standard HTML, CSS, and JavaScript with Chart.js as the visualization engine, this tool provides an intuitive and modern interface that is both lightweight and highly effective — delivering visual insights similar in quality to advanced libraries like Matplotlib.
+# CSV Visualizer — Interactive Data Charting Tool
 
-Key Features
-Simple Upload Interface: Users start with a clear, attractive upload button to load their CSV files.
+## Project Overview
+CSV Visualizer is a responsive web application that allows users to upload CSV files and transform raw tabular data into customizable, visually appealing charts. Built using plain HTML, CSS, and JavaScript with Chart.js, it provides a clean and intuitive interface to help users quickly gain insights from their data — comparable to advanced visualization tools like Matplotlib.
 
-Dynamic Customization Panel: After uploading, users can select the chart type (bar, line, pie) and choose which columns represent the X and Y axes.
+## Features
+- **Simple Upload Interface:** Start by uploading any CSV file with ease using an attractive, user-friendly button.
+- **Dynamic Customization Panel:** Select chart type (Bar, Line, Pie) and choose which columns to plot as X and Y axes after uploading.
+- **On-Demand Visualization:** Charts are rendered only when the user clicks the “Visualize” button, optimizing performance and control.
+- **Responsive & Modern UI:** Solid color theme with crisp typography and sleek controls ensure great UX across devices.
+- **Powerful Charting Engine:** Utilizes Chart.js for smooth, interactive, and visually stunning charts.
+- **Lightweight & Client-Side:** Fully functional without any backend or external dependencies (besides Chart.js CDN).
 
-On-Demand Visualization: Charts are rendered only after the user clicks the “Visualize” button, offering control and reducing unnecessary computation.
+## Technologies Used
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
+- [Chart.js](https://www.chartjs.org/) (via CDN)
 
-Responsive & Modern UI: The interface features a solid color theme with clean typography, styled buttons, and intuitive dropdowns, providing a smooth user experience across all device sizes.
+## How to Use
+1. Open `index.html` in a modern browser.
+2. Click the “Upload CSV File” button and select your CSV.
+3. Once uploaded, choose the chart type and columns for the X and Y axes.
+4. Click “Visualize” to generate the chart.
 
-Powerful Charting Engine: Leveraging Chart.js ensures highly interactive and visually appealing charts with minimal performance overhead.
+## Potential Use Cases
+- Quick data visualization for CSV datasets.
+- Educational tool for learning data visualization.
+- Prototype dashboard or UI components for data-centric apps.
 
-Easy to Extend: The codebase is modular and easy to expand with additional chart types, export options, or multi-series support.
+## Challenges & Solutions
+- Parsing CSV directly in-browser using JavaScript.
+- Dynamically populating dropdowns based on user data.
+- Managing chart rendering lifecycle for smooth UX.
+- Designing a professional UI with only vanilla web technologies.
+- Keeping the tool lightweight while maintaining rich features.
 
-Technical Stack
-Frontend: HTML5, CSS3, Vanilla JavaScript
+## Future Enhancements
+- Support multiple Y-axis columns for multi-series charts.
+- Add export options (PNG, PDF).
+- Enable dark/light theme switching.
+- Add drag-and-drop file upload.
+- Connect with external APIs for real-time data visualization.
 
-Charting Library: Chart.js (CDN loaded)
+---
 
-No backend: Fully client-side, no server dependencies or database.
+Feel free to fork, modify, and extend this project!
 
-Use Cases
-Data analysts seeking quick visual previews of CSV datasets.
+---
 
-Students learning data visualization concepts.
+### Author
 
-Developers prototyping dashboard components.
+*Sarathkumar S*
 
-Any user wanting a fast and easy way to convert spreadsheet data into insightful charts.
+---
 
-Challenges Overcome
-Parsing CSV files reliably in the browser.
+### License
 
-Dynamically populating UI elements based on uploaded data.
-
-Managing chart lifecycle (creation, update, destruction) for smooth UX.
-
-Designing a clean, professional UI without external frameworks.
-
-Balancing feature richness with performance and low resource consumption.
-
-Future Enhancements
-Support for multiple Y-axis columns (multi-series charts).
-
-Export charts as images or PDFs.
-
-Dark/light theme toggling.
-
-Drag-and-drop file upload support.
-
-Integration with APIs for live data visualization.
+MIT License © *Sarathkumar S*
