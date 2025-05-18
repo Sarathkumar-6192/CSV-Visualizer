@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CSV Visualizer</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e2f;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: #29293d;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .custom-file-upload {
+      display: inline-block;
+      padding: 0.9rem 1.6rem;
+      background-color: #00c3ff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      margin: auto;
+      transition: background 0.3s ease;
+    }
+
+    .custom-file-upload:hover {
+      background-color: #009ecf;
+    }
+
+    .customization {
+      display: none;
+      flex-direction: column;
+      margin-top: 2rem;
+    }
+
+    label {
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #ddd;
+    }
+
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      background: #1e1e2f;
+      color: white;
+      border: 1px solid #444;
+    }
+
+    .btn-visualize {
+      margin-top: 2rem;
+      padding: 0.9rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: white;
+      background: #00b36b;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-visualize:hover {
+      background: #009f5e;
+    }
+
+    canvas {
+      margin-top: 2rem;
+      max-width: 100%;
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>CSV Visualizer</h1>
+
+    <!-- Upload file -->
+    <label class="custom-file-upload">
+      <input type="file" id="csvFile" accept=".csv" />
+      Upload CSV File
+    </label>
+
+    <!-- Config panel (hidden by default) -->
+    <div class="customization" id="customizationPanel">
+      <label for="chartType">Chart Type:</label>
+      <select id="chartType">
+        <option value="bar">Bar Chart</option>
+        <option value="line">Line Chart</option>
+        <option value="pie">Pie Chart</option>
+      </select>
+
+      <label for="xAxis">X-Axis Column:</label>
+      <select id="xAxis"></select>
+
+      <label for="yAxis">Y-Axis Column:</label>
+      <select id="yAxis"></select>
+
+      <button class="btn-visualize" id="visualizeBtn">Visualize</button>
+    </div>
+
+    <canvas id="csvChart"></canvas>
+  </div>
+
+  <script>
+    let csvData = [];
+    let chart;
+
+    document.getElementById("csvFile").addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const text = e.target.result;
+        parseCSV(text);
+      };
+      reader.readAsText(file);
+    });
+
+    function parseCSV(data) {
+      const rows = data.trim().split('\n').map(row => row.split(','));
+      const headers = rows[0];
+      csvData = rows.slice(1);
+
+      populateDropdown('xAxis', headers);
+      populateDropdown('yAxis', headers);
+
+      document.getElementById("customizationPanel").style.display = "flex";
+    }
+
+    function populateDropdown(id, options) {
+      const dropdown = document.getElementById(id);
+      dropdown.innerHTML = '';
+      options.forEach((opt, i) => {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = opt;
+        dropdown.appendChild(option);
+      });
+    }
+
+    document.getElementById("visualizeBtn").addEventListener("click", drawChart);
+
+    function drawChart() {
+      const xIndex = parseInt(document.getElementById("xAxis").value);
+      const yIndex = parseInt(document.getElementById("yAxis").value);
+      const chartType = document.getElementById("chartType").value;
+
+      if (isNaN(xIndex) || isNaN(yIndex)) return;
+
+      const labels = csvData.map(row => row[xIndex]);
+      const values = csvData.map(row => parseFloat(row[yIndex]) || 0);
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(document.getElementById("csvChart"), {
+        type: chartType,
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'CSV Data',
+            data: values,
+            backgroundColor: generateColors(values.length, chartType),
+            borderColor: '#00c3ff',
+            borderWidth: chartType === 'line' ? 2 : 0
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: chartType !== 'bar'
+            }
+          }
+        }
+      });
+    }
+
+    function generateColors(count, type) {
+      const colors = ['#00c3ff', '#f39c12', '#e74c3c', '#2ecc71', '#9b59b6', '#34495e'];
+      return Array.from({ length: count }, (_, i) =>
+        type === 'pie' ? colors[i % colors.length] : 'rgba(0, 195, 255, 0.6)'
+      );
+    }
+  </script>
+</body>
+</html>
+
